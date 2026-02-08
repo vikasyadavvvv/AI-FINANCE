@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import ReportSettingModel from "../models/report-setting.model";
+import ReportSettingModel, { ReportFrequencyEnum } from "../models/report-setting.model";
 import ReportModel from "../models/report.model";
 import TransactionModel, {
   TransactionTypeEnum,
@@ -48,8 +48,8 @@ export const updateReportSettingService = async (
   userId: string,
   body: UpdateReportSettingType
 ) => {
-  const { isEnabled } = body;
-  let nextReportDate: Date | null = null;
+  const { isEnabled, frequency: requestedFrequency } = body;
+  let nextReportDate: Date | null;
 
   const existingReportSetting = await ReportSettingModel.findOne({
     userId,
@@ -57,25 +57,44 @@ export const updateReportSettingService = async (
   if (!existingReportSetting)
     throw new NotFoundException("Report setting not found");
 
-  //   const frequency =
-  //     existingReportSetting.frequency || ReportFrequencyEnum.MONTHLY;
+  const frequency =
+    requestedFrequency ||
+    existingReportSetting.frequency ||
+    ReportFrequencyEnum.MONTHLY;
 
-  if (isEnabled) {
+  const isEnabledEffective =
+    typeof isEnabled === "boolean"
+      ? isEnabled
+      : existingReportSetting.isEnabled;
+
+  const frequencyChanged =
+    !!requestedFrequency &&
+    requestedFrequency !== existingReportSetting.frequency;
+
+  if (isEnabledEffective) {
     const currentNextReportDate = existingReportSetting.nextReportDate;
     const now = new Date();
-    if (!currentNextReportDate || currentNextReportDate <= now) {
+    if (
+      frequencyChanged ||
+      !currentNextReportDate ||
+      currentNextReportDate <= now
+    ) {
       nextReportDate = calulateNextReportDate(
-        existingReportSetting.lastSentDate
+        existingReportSetting.lastSentDate,
+        frequency
       );
     } else {
       nextReportDate = currentNextReportDate;
     }
+  } else {
+    nextReportDate = null;
   }
 
   console.log(nextReportDate, "nextReportDate");
 
   existingReportSetting.set({
     ...body,
+    frequency,
     nextReportDate,
   });
 

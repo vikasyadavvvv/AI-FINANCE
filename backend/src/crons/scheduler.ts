@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import { processRecurringTransactions } from "./jobs/transaction.job";
-// import { processReportJob } from "./jobs/report.job";
+import { processReportJob } from "./jobs/report.job";
 
 const scheduleJob = (name: string, time: string, job: Function) => {
   console.log(`Scheduling ${name} at ${time}`);
@@ -30,7 +30,7 @@ export const startJobs = () => {
                                                                               //* - every month
                                                                               //* - every week  
 
-    //run 2:30am every first of the month
-    // scheduleJob("Reports", "30 2 1 * *", processReportJob),
+    // run 2:30am every day to cover daily/weekly/monthly reports
+    scheduleJob("Reports", "30 2 * * *", processReportJob),
   ];
 };

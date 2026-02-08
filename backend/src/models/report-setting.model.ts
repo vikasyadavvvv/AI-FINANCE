@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import { Document } from "mongoose";
 
 export enum ReportFrequencyEnum {
+  DAILY = "DAILY",
+  WEEKLY = "WEEKLY",
   MONTHLY = "MONTHLY",
 }
 

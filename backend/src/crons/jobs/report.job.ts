@@ -1,5 +1,18 @@
-import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
-import ReportSettingModel from "../../models/report-setting.model";
+import {
+  endOfDay,
+  endOfMonth,
+  endOfWeek,
+  format,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
+  subDays,
+  subMonths,
+  subWeeks,
+} from "date-fns";
+import ReportSettingModel, {
+  ReportFrequencyEnum,
+} from "../../models/report-setting.model";
 import { UserDocument } from "../../models/user.model";
 import mongoose from "mongoose";
 import { generateReportService } from "../../services/report.service";
@@ -12,14 +25,6 @@ export const processReportJob = async () => {
 
   let processedCount = 0;
   let failedCount = 0;
-
-  //Today july 1, then run report for -> june 1 - 30 
-//Get Last Month because this will run on the first of the month
-  const from = startOfMonth(subMonths(now, 1));
-  const to = endOfMonth(subMonths(now, 1));
-
-  // const from = "2025-04-01T23:00:00.000Z";
-  // const to = "2025-04-T23:00:00.000Z";
 
   try {
     const reportSettingCursor = ReportSettingModel.find({
@@ -38,12 +43,32 @@ export const processReportJob = async () => {
         continue;
       }
 
+      const frequency = setting.frequency || ReportFrequencyEnum.MONTHLY;
+      let from: Date;
+      let to: Date;
+
+      switch (frequency) {
+        case ReportFrequencyEnum.DAILY:
+          from = startOfDay(subDays(now, 1));
+          to = endOfDay(subDays(now, 1));
+          break;
+        case ReportFrequencyEnum.WEEKLY:
+          from = startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 });
+          to = endOfWeek(subWeeks(now, 1), { weekStartsOn: 1 });
+          break;
+        case ReportFrequencyEnum.MONTHLY:
+        default:
+          from = startOfMonth(subMonths(now, 1));
+          to = endOfMonth(subMonths(now, 1));
+          break;
+      }
+
       const session = await mongoose.startSession();
 
       try {
         const report = await generateReportService(user.id, from, to);
 
-        console.log(report, "resport data");
+        console.log(report, "report data");
 
         let emailSent = false;
         if (report) {
@@ -60,7 +85,7 @@ export const processReportJob = async () => {
                 topSpendingCategories: report.summary.topCategories,
                 insights: report.insights,
               },
-              frequency: setting.frequency!,
+              frequency,
             });
             emailSent = true;
           } catch (error) {
@@ -93,7 +118,7 @@ export const processReportJob = async () => {
                   update: {
                     $set: {
                       lastSentDate: now,
-                      nextReportDate: calulateNextReportDate(now),
+                      nextReportDate: calulateNextReportDate(now, frequency),
                       updatedAt: now,
                     },
                   },
@@ -107,7 +132,7 @@ export const processReportJob = async () => {
                     sentDate: now,
                     period:
                       report?.period ||
-                      `${format(from, "MMMM d")}–${format(to, "d, yyyy")}`,
+                      `${format(from, "MMMM d")} - ${format(to, "d, yyyy")}`,
                     status: report
                       ? ReportStatusEnum.FAILED
                       : ReportStatusEnum.NO_ACTIVITY,
@@ -123,7 +148,7 @@ export const processReportJob = async () => {
                   update: {
                     $set: {
                       lastSentDate: null,
-                      nextReportDate: calulateNextReportDate(now),
+                      nextReportDate: calulateNextReportDate(now, frequency),
                       updatedAt: now,
                     },
                   },
@@ -150,8 +175,8 @@ export const processReportJob = async () => {
       }
     }
 
-    console.log(`✅Processed: ${processedCount} report`);
-    console.log(`❌ Failed: ${failedCount} report`);
+    console.log(`Processed: ${processedCount} report`);
+    console.log(`Failed: ${failedCount} report`);
 
     return {
       success: true,
