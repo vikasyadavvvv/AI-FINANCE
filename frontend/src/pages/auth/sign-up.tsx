@@ -10,7 +10,7 @@ const SignUp = () => {
           <Logo url="/" />
         </div>
         <div className="flex flex-1 items-center justify-center">
-          <div className="w-[90%] max-w-[90%]">
+          <div className="sm:w-full lg:w-[60%]">
             <SignUpForm />
           </div>
         </div>
