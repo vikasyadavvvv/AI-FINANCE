@@ -1,0 +1,144 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+body {
+  pointer-events: auto;
+  font-family: "Onest", sans-serif !important;
+}
+
+.recurring-control button span{
+  text-transform: capitalize !important;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --bg-color: #f2f6ff;
+  --secondary-dark-color: #122455;
+  --max-width: 78rem;
+  --radius: 0.5rem;
+  --background: #f2f6ff;
+  --foreground: #0c142b;
+  --card: #ffffff;
+  --card-foreground: #0c142b;
+  --popover: #ffffff;
+  --popover-foreground: #0c142b;
+  --primary: #2b4cc9;
+  --primary-foreground: #f4f6ff;
+  --secondary: #4ea13f;
+  --secondary-foreground: #f1fff4;
+  --muted: #e7eefc;
+  --muted-foreground: #556585;
+  --accent: #e1e9ff;
+  --accent-foreground: #2b4cc9;
+  --destructive: #d84a4a;
+  --destructive-foreground: #fff1f1;
+  --border: #d6e0f4;
+  --input: #d6e0f4;
+  --ring: #2b4cc9;
+  --chart-1: #2b4cc9;
+  --chart-2: #4ea13f;
+  --chart-3: #f0b44c;
+  --chart-4: #e46b5e;
+  --chart-5: #6b7cff;
+  --sidebar: #edf2ff;
+  --sidebar-foreground: #0c142b;
+  --sidebar-primary: #2b4cc9;
+  --sidebar-primary-foreground: #f4f6ff;
+  --sidebar-accent: #e0e8ff;
+  --sidebar-accent-foreground: #2b4cc9;
+  --sidebar-border: #d3def5;
+  --sidebar-ring: #2b4cc9;
+}
+
+.dark {
+  --bg-color: #0a1124;
+  --secondary-dark-color: #0e1b3f;
+  --max-width: 78rem;
+  --background: #0a1124;
+  --foreground: #e9eeff;
+  --card: #121b3d;
+  --card-foreground: #e9eeff;
+  --popover: #121b3d;
+  --popover-foreground: #e9eeff;
+  --primary: #3a5ef0;
+  --primary-foreground: #eef1ff;
+  --secondary: #4ea13f;
+  --secondary-foreground: #e9fff2;
+  --muted: #1b244a;
+  --muted-foreground: #9ba7c6;
+  --accent: #1c2756;
+  --accent-foreground: #e9eeff;
+  --destructive: #e35d5d;
+  --destructive-foreground: #fff1f1;
+  --border: #24305d;
+  --input: #24305d;
+  --ring: #3a5ef0;
+  --chart-1: #3a5ef0;
+  --chart-2: #4ea13f;
+  --chart-3: #f1b251;
+  --chart-4: #f07a6b;
+  --chart-5: #7c8cff;
+  --sidebar: #0f1837;
+  --sidebar-foreground: #e9eeff;
+  --sidebar-primary: #3a5ef0;
+  --sidebar-primary-foreground: #eef1ff;
+  --sidebar-accent: #1b2552;
+  --sidebar-accent-foreground: #e9eeff;
+  --sidebar-border: #242e56;
+  --sidebar-ring: #3a5ef0;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-[var(--bg-color)] dark:bg-background text-foreground;
+  }
+}
+
+
+/* --chart-1: oklch(0.37 0.14 146.5);
+--chart-2: oklch(0.65 0.16 147.2);
+--chart-3: oklch(0.48 0.19 148.6);
+--chart-4: oklch(0.28 0.11 145.8);
+--chart-5: oklch(0.18 0.08 147.0); */
