@@ -68,6 +68,7 @@ export const transactionColumns: ColumnDef<TransactionType>[] = [
     header: ({ column }) => (
       <Button
         variant="ghost"
+        className="w-full justify-center ml-4"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Date Created
@@ -85,7 +86,7 @@ export const transactionColumns: ColumnDef<TransactionType>[] = [
     header: ({ column }) => (
       <Button
         variant="ghost"
-        className="!pl-0"
+        className="w-full justify-center ml-4"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Category
@@ -102,6 +103,7 @@ export const transactionColumns: ColumnDef<TransactionType>[] = [
     header: ({ column }) => (
       <Button
         variant="ghost"
+        className="w-full justify-center ml-3"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Type
@@ -127,14 +129,14 @@ export const transactionColumns: ColumnDef<TransactionType>[] = [
   },
   {
     accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    header: () => <div className="text-center">Amount</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
       const type = row.getValue("type");
 
       return (
         <div
-          className={`text-right font-medium ${
+          className={`text-center font-medium ${
             type === _TRANSACTION_TYPE.INCOME
               ? "text-secondary"
               : "text-destructive"
@@ -151,6 +153,7 @@ export const transactionColumns: ColumnDef<TransactionType>[] = [
     header: ({ column }) => (
       <Button
         variant="ghost"
+        className="w-full justify-center ml-4"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Transaction Date
@@ -177,6 +180,7 @@ export const transactionColumns: ColumnDef<TransactionType>[] = [
     header: ({ column }) => (
       <Button
         variant="ghost"
+        className="w-full justify-center ml-4"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Frequently
@@ -213,7 +217,7 @@ export const transactionColumns: ColumnDef<TransactionType>[] = [
       const { label, icon: Icon } = frequencyInfo;
 
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           <Icon className="h-4 w-4 text-muted-foreground" />
           <div className="flex flex-col">
             <span>{label}</span>

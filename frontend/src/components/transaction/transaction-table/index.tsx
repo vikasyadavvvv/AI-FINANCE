@@ -90,6 +90,7 @@ const TransactionTable = (props: {
       searchPlaceholder="Search transactions..."
       isLoading={isFetching}
       isBulkDeleting={isBulkDeleting}
+      className="[&_th]:!text-center [&_td]:!text-center hide-scrollbar"
       isShowPagination={props.isShowPagination}
       pagination={pagination}
       filters={[

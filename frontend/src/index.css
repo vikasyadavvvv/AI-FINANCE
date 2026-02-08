@@ -10,6 +10,16 @@ body {
   text-transform: capitalize !important;
 }
 
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
